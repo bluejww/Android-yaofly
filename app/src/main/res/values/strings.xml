@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">AndroidDance</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">实时咨询</string>
+    <string name="title_dashboard">个人操作</string>
+    <string name="title_notifications">网友留言</string>
 </resources>
