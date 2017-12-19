@@ -1,29 +1,69 @@
 apply plugin: 'com.android.application'
 
+def releaseTime() {
+    return new Date().format("yyyyMMdd", TimeZone.getTimeZone("UTC"))
+}
 android {
-    compileSdkVersion 26
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
+    buildToolsVersion rootProject.ext.android.buildToolsVersion
+
     defaultConfig {
-        applicationId "com.study.jianww.androiddance"
-        minSdkVersion 21
-        targetSdkVersion 26
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        applicationId rootProject.ext.android.applicationId
+        minSdkVersion rootProject.ext.android.minSdkVersion
+        targetSdkVersion rootProject.ext.android.targetSdkVersion
+        versionCode rootProject.ext.android.versionCode
+        versionName rootProject.ext.android.versionName
+        multiDexEnabled = true
+        vectorDrawables.useSupportLibrary = true
+        javaCompileOptions {
+            annotationProcessorOptions
+                    {
+                        includeCompileClasspath = true
+                    }
+        }
+    }
+    //执行lint检查，有任何的错误或者警告提示，都会终止构建，我们可以将其关掉。
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+
         release {
+            // 不显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            //Zipalign优化
+            zipAlignEnabled true
+            // 移除无用的resource文件
+            shrinkResources false
+            //混淆
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support:design:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile project(':library:common')
+    //通用库
+    compile project(':library:photoPicker')
+    //图片选择
+    compile project(':library:irecyclerview')
+    //万能适配器和recyclerview
+    compile project(':library:oneKeyShareSDK')
+    //分享
+    //常用提示框
+    compile 'com.android.support.constraint:constraint-layout:1.0.1'
 }

@@ -278,7 +278,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
         if(!isConfigChange){
             AppManager.getAppManager().finishActivity(this);
         }
-        ButterKnife.unbind(this);
+//        ButterKnife.unbind(this);
 
     }
 }
