@@ -66,4 +66,5 @@ dependencies {
     //分享
     //常用提示框
     compile 'com.android.support.constraint:constraint-layout:1.0.1'
+    androidTestCompile 'junit:junit:4.12'
 }
