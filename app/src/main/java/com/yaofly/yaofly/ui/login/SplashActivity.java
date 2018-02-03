@@ -1,4 +1,4 @@
-package com.study.jianww.androiddance.ui.login;
+package com.yaofly.yaofly.ui.login;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;
@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jaydenxiao.common.base.BaseActivity;
-import com.study.jianww.androiddance.R;
-import com.study.jianww.androiddance.ui.MainActivity;
+import com.yaofly.yaofly.R;
+import com.yaofly.yaofly.ui.MainActivity;
 
 
 import butterknife.BindView;

@@ -1,4 +1,4 @@
-package com.study.jianww.androiddance.ui;
+package com.yaofly.yaofly.ui;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -9,7 +9,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-import com.study.jianww.androiddance.R;
+import com.yaofly.yaofly.R;
+
 
 public class MainActivity extends AppCompatActivity {
 
