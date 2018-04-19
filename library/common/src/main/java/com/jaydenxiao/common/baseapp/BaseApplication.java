@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.support.multidex.MultiDex;
 
-import com.yanzhenjie.nohttp.Logger;
-import com.yanzhenjie.nohttp.NoHttp;
 
 /**
  * APPLICATION
