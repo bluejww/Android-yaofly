@@ -31,6 +31,11 @@ ext {
 }
 
 dependencies {
+
+    //nohttp
+    implementation rootProject.ext.dependencies["nohttp"]
+    implementation rootProject.ext.dependencies["nohttppermission"]
+
     compile fileTree(include: ['*.jar'], dir: 'libs')
     compile files('libs/Parse-1.9.4.jar')
     compile files('libs/commons-codec-1.6.jar')

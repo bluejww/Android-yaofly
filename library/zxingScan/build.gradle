@@ -1,12 +1,9 @@
-apply plugin: 'com.android.application'
 apply plugin: 'com.android.library'
 
-dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-}
+
 
 android {
-    ompileSdkVersion rootProject.ext.android.compileSdkVersion
+    compileSdkVersion rootProject.ext.android.compileSdkVersion
     buildToolsVersion rootProject.ext.android.buildToolsVersion
 
     defaultConfig {
@@ -41,4 +38,7 @@ android {
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
     }
+}
+dependencies {
+    compile fileTree(dir: 'libs', include: '*.jar')
 }

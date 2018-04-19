@@ -21,6 +21,11 @@ ext {
     ]
 
     dependencies = [
+
+
+            "nohttp"                         : 'com.yanzhenjie.nohttp:okhttp:1.1.9',//nohttp基于okhttp3
+            "nohttppermission"               : 'com.yanzhenjie:permission:2.0.0-rc3',//权限框架
+
             //base
             "appcompat-v7"                   : "com.android.support:appcompat-v7:${dependVersion.support}",
             "recyclerview-v7"                : "com.android.support:recyclerview-v7:${dependVersion.support}",
