@@ -19,9 +19,6 @@ public class BaseApplication extends Application {
     public void onCreate() {
         super.onCreate();
         baseApplication = this;
-        NoHttp.initialize(this);//nohttp默认初始化
-        Logger.setDebug(true);
-        Logger.setTag("Ingernet request/response data :  ");
     }
 
     public static Context getAppContext() {

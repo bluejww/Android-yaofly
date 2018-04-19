@@ -1,13 +1,12 @@
 package com.jaydenxiao.common.baserx;
 
+import org.reactivestreams.Subscription;
+
 import java.util.HashMap;
 import java.util.Map;
 
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 
 /**
  * 用于管理单个presenter的RxBus的事件和Rxjava相关代码的生命周期处理

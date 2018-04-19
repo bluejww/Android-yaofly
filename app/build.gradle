@@ -56,6 +56,8 @@ android {
 
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
+    implementation rootProject.ext.dependencies["nohttp"]
+    implementation rootProject.ext.dependencies["nohttppermission"]
     compile project(':library:common')
     //通用库
     compile project(':library:photoPicker')

@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.app.LoaderManager.LoaderCallbacks;
@@ -31,8 +32,23 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.alibaba.fastjson.JSON;
 import com.jaydenxiao.common.base.BaseActivity;
+import com.yanzhenjie.nohttp.Logger;
+import com.yanzhenjie.nohttp.NoHttp;
+import com.yanzhenjie.nohttp.rest.Request;
+import com.yanzhenjie.nohttp.rest.Response;
+import com.yaofly.yaofly.Model.LoginResponse;
 import com.yaofly.yaofly.R;
+import com.yaofly.yaofly.netutil.ServerHelper;
+
+import io.reactivex.Observable;
+import io.reactivex.ObservableEmitter;
+import io.reactivex.ObservableOnSubscribe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.Manifest.permission.READ_CONTACTS;
 
@@ -197,7 +213,61 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             showProgress(true);
             mAuthTask = new UserLoginTask(email, password);
             mAuthTask.execute((Void) null);
+
+            requestLogin(email, password);
+
         }
+    }
+
+    /**
+     * rxjava to request login
+     *
+     * @param account
+     * @param password
+     */
+    private void requestLogin(final String account, final String password) {
+        Observable.create(new ObservableOnSubscribe<LoginResponse>() {
+            @Override
+            public void subscribe(ObservableEmitter<LoginResponse> emitter) throws Exception {
+                LoginResponse loginResponse = null;
+                try {
+                    Request<String> request = NoHttp.createStringRequest(ServerHelper.LOGIN);
+                    request.add("userName", account);
+                    request.add("password", password);
+                    String deviceId = Settings.Secure.getString(LoginActivity.this.getContentResolver(), Settings.Secure.ANDROID_ID);
+                    request.add("mobileMac", deviceId);
+                    Response<String> response = NoHttp.startRequestSync(request);
+                    String responseJson = response.get();
+                    loginResponse = JSON.parseObject(responseJson, LoginResponse.class);
+                } catch (Exception e) {
+                    emitter.onError(e);
+                    Logger.e("请求报错");
+                    return;
+                }
+                emitter.onNext(loginResponse);
+                emitter.onComplete();
+
+            }
+        }).subscribeOn(Schedulers.io()).onErrorReturn(new Function<Throwable, LoginResponse>() {
+            @Override
+            public LoginResponse apply(Throwable throwable) throws Exception {
+                return null;
+            }
+        }).
+                observeOn(AndroidSchedulers.mainThread()).
+                subscribe(new Consumer<LoginResponse>() {
+                    @Override
+                    public void accept(LoginResponse loginResponse) throws Exception {
+
+                    }
+
+
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Exception {
+
+                    }
+                });
     }
 
     private boolean isEmailValid(String email) {
@@ -317,13 +387,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         @Override
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
-
-            try {
-                // Simulate network access.
-                Thread.sleep(2000);
-            } catch (InterruptedException e) {
-                return false;
-            }
 
             for (String credential : DUMMY_CREDENTIALS) {
                 String[] pieces = credential.split(":");
