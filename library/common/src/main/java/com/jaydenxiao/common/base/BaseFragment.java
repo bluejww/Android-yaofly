@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.jaydenxiao.common.R;
-import com.jaydenxiao.common.baserx.RxManager;
 import com.jaydenxiao.common.commonutils.TUtil;
 import com.jaydenxiao.common.commonutils.ToastUitl;
 import com.jaydenxiao.common.commonwidget.LoadingDialog;
@@ -22,49 +21,17 @@ import butterknife.ButterKnife;
  * on 2016.07.12:38
  */
 /***************使用例子*********************/
-//1.mvp模式
-//public class SampleFragment extends BaseFragment<NewsChanelPresenter, NewsChannelModel>implements NewsChannelContract.View {
-//    @Override
-//    public int getLayoutId() {
-//        return R.layout.activity_news_channel;
-//    }
-//
-//    @Override
-//    public void initPresenter() {
-//        mPresenter.setVM(this, mModel);
-//    }
-//
-//    @Override
-//    public void initView() {
-//    }
-//}
-//2.普通模式
-//public class SampleFragment extends BaseFragment {
-//    @Override
-//    public int getLayoutResource() {
-//        return R.layout.activity_news_channel;
-//    }
-//
-//    @Override
-//    public void initPresenter() {
-//    }
-//
-//    @Override
-//    public void initView() {
-//    }
-//}
+
 public abstract  class BaseFragment<T extends BasePresenter, E extends BaseModel> extends Fragment {
     protected View rootView;
     public T mPresenter;
     public E mModel;
-    public RxManager mRxManager;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null)
             rootView = inflater.inflate(getLayoutResource(), container, false);
-        mRxManager=new RxManager();
         ButterKnife.bind(this, rootView);
         mPresenter = TUtil.getT(this, 0);
         mModel= TUtil.getT(this,1);
@@ -195,10 +162,6 @@ public abstract  class BaseFragment<T extends BasePresenter, E extends BaseModel
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-//        ButterKnife.unbind(this);
-        if (mPresenter != null)
-            mPresenter.onDestroy();
-        mRxManager.clear();
     }
 
 

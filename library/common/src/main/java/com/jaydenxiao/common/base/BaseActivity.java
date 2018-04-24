@@ -13,7 +13,6 @@ import android.view.Window;
 import com.jaydenxiao.common.BuildConfig;
 import com.jaydenxiao.common.R;
 import com.jaydenxiao.common.baseapp.AppManager;
-import com.jaydenxiao.common.baserx.RxManager;
 import com.jaydenxiao.common.commonutils.TUtil;
 import com.jaydenxiao.common.commonutils.ToastUitl;
 import com.jaydenxiao.common.commonwidget.LoadingDialog;
@@ -62,14 +61,12 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     public T mPresenter;
     public E mModel;
     public Context mContext;
-    public RxManager mRxManager;
     private boolean isConfigChange=false;
 
         @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         isConfigChange=false;
-        mRxManager=new RxManager();
         doBeforeSetcontentView();
         setContentView(getLayoutId());
         ButterKnife.bind(this);
@@ -270,11 +267,7 @@ public abstract class BaseActivity<T extends BasePresenter, E extends BaseModel>
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mPresenter != null)
-            mPresenter.onDestroy();
-        if(mRxManager!=null) {
-            mRxManager.clear();
-        }
+
         if(!isConfigChange){
             AppManager.getAppManager().finishActivity(this);
         }

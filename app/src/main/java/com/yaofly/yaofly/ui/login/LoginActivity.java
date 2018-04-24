@@ -3,6 +3,7 @@ package com.yaofly.yaofly.ui.login;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -13,8 +14,6 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
@@ -34,6 +33,7 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSON;
 import com.jaydenxiao.common.base.BaseActivity;
+import com.jaydenxiao.common.commonutils.ToastUitl;
 import com.yanzhenjie.nohttp.Logger;
 import com.yanzhenjie.nohttp.NoHttp;
 import com.yanzhenjie.nohttp.rest.Request;
@@ -41,6 +41,7 @@ import com.yanzhenjie.nohttp.rest.Response;
 import com.yaofly.yaofly.Model.LoginResponse;
 import com.yaofly.yaofly.R;
 import com.yaofly.yaofly.netutil.ServerHelper;
+import com.yaofly.yaofly.ui.MainActivity;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -69,10 +70,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
     private static final String[] DUMMY_CREDENTIALS = new String[]{
             "foo@example.com:hello", "bar@example.com:world"
     };
-    /**
-     * Keep track of the login task to ensure we can cancel it if requested.
-     */
-    private UserLoginTask mAuthTask = null;
 
     // UI references.
     private AutoCompleteTextView mEmailView;
@@ -170,9 +167,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
      * errors are presented and no actual login attempt is made.
      */
     private void attemptLogin() {
-        if (mAuthTask != null) {
-            return;
-        }
 
         // Reset errors.
         mEmailView.setError(null);
@@ -211,8 +205,6 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
             // Show a progress spinner, and kick off a background task to
             // perform the user login attempt.
             showProgress(true);
-            mAuthTask = new UserLoginTask(email, password);
-            mAuthTask.execute((Void) null);
 
             requestLogin(email, password);
 
@@ -258,9 +250,8 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
                 subscribe(new Consumer<LoginResponse>() {
                     @Override
                     public void accept(LoginResponse loginResponse) throws Exception {
-
+                        response(loginResponse);
                     }
-
 
                 }, new Consumer<Throwable>() {
                     @Override
@@ -268,6 +259,22 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
 
                     }
                 });
+    }
+
+    /**
+     * 根据返回结果中转到主activity
+     * @param loginResponse
+     */
+    private void response(LoginResponse loginResponse) {
+        showProgress(false);
+        int code = loginResponse.getResultCode();
+        if(ServerHelper.OK==code){
+            Intent intent = new Intent(this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }else{
+            ToastUitl.showLong("response error");
+        }
     }
 
     private boolean isEmailValid(String email) {
@@ -370,54 +377,5 @@ public class LoginActivity extends BaseActivity implements LoaderCallbacks<Curso
         int IS_PRIMARY = 1;
     }
 
-    /**
-     * Represents an asynchronous login/registration task used to authenticate
-     * the user.
-     */
-    public class UserLoginTask extends AsyncTask<Void, Void, Boolean> {
-
-        private final String mEmail;
-        private final String mPassword;
-
-        UserLoginTask(String email, String password) {
-            mEmail = email;
-            mPassword = password;
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... params) {
-            // TODO: attempt authentication against a network service.
-
-            for (String credential : DUMMY_CREDENTIALS) {
-                String[] pieces = credential.split(":");
-                if (pieces[0].equals(mEmail)) {
-                    // Account exists, return true if the password matches.
-                    return pieces[1].equals(mPassword);
-                }
-            }
-
-            // TODO: register the new account here.
-            return true;
-        }
-
-        @Override
-        protected void onPostExecute(final Boolean success) {
-            mAuthTask = null;
-            showProgress(false);
-
-            if (success) {
-                finish();
-            } else {
-                mPasswordView.setError(getString(R.string.error_incorrect_password));
-                mPasswordView.requestFocus();
-            }
-        }
-
-        @Override
-        protected void onCancelled() {
-            mAuthTask = null;
-            showProgress(false);
-        }
-    }
 }
 

@@ -15,14 +15,14 @@ public class ResponseInfo implements Serializable{
         this.errorMessage = errorMessage;
     }
 
-    public String getResultCode() {
+    public int getResultCode() {
         return resultCode;
     }
 
-    public void setResultCode(String resultCode) {
+    public void setResultCode(int resultCode) {
         this.resultCode = resultCode;
     }
 
     private String errorMessage;
-    private String resultCode;
+    private int resultCode;
 }

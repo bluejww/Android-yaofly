@@ -8,12 +8,12 @@ public class ServerHelper {
     /**
      * ip地址
      */
-    public final static String SERVER = "http://106.14.222.26/yaofly/api";
+    public final static String SERVER = "http://106.14.222.26/api";
 
-    public static final String LOGIN = SERVER+"/appUser/userLoginWay";
-    public static final String LOGOUT = SERVER+"svc=account&cmd=logout";
+    public static final String LOGIN = SERVER+"/userLoginIn";
+    public static final String LOGOUT = SERVER+"/userLoginOut";
 
-    public static final String OK = "200";
-    public static final String NOT_OK = "201";
+    public static final int OK = 200;
+    public static final int NOT_OK = 201;
 
 }
